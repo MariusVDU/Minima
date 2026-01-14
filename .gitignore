@@ -1,0 +1,92 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Spring Boot
+spring.log
+application-local.properties
+application-dev.properties
+application-prod.properties
+
+# Docker
+.env
+.env.local
+docker-volumes/
+mysql/
+data/
+
+# IDE
+.idea/
+.idea/workspace.xml
+.idea/tasks.xml
+*.iml
+*.iws
+*.ipr
+.vscode/
+.vscode/settings.json
+.vscode/extensions.json
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+.c9/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+spring.log
+error.log
+
+# Build & Runtime
+build/
+dist/
+*.class
+*.jar
+!mvnw.jar
+*.exe
+bin/
+
+# Database
+*.sql
+*.sql.bak
+db_backup/
+
+# Local development
+local.properties
+.env
+.env.*.local
+
+# Temporary files
+*.tmp
+*.bak
+.temp/
+*.swp
+
+# Node.js (jei turėtumėte frontend)
+node_modules/
+npm-debug.log
+package-lock.json
+
+# OS specific
+.AppleDouble
+.LSOverride
+.TemporaryItems
