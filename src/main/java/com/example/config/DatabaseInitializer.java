@@ -84,10 +84,16 @@ public class DatabaseInitializer implements CommandLineRunner {
             System.out.println("\n==============================================");
             System.out.println("✓ INICIALIZACIJA BAIGTA SĖKMINGAI");
             System.out.println("==============================================");
-            System.out.println("REST API prieinamas:");
-            System.out.println("  • Parduotuvės: http://localhost:8080/api/parduotuves");
-            System.out.println("  • Darbuotojai: http://localhost:8080/api/darbuotojai");
-            System.out.println("  • Pareigos: http://localhost:8080/api/pareigos");
+            System.out.println("\nREST API ENDPOINTAI (8 iš viso):");
+            System.out.println("  1. Parduotuvės:        http://localhost:8080/api/parduotuves");
+            System.out.println("  2. Darbuotojai:        http://localhost:8080/api/darbuotojai");
+            System.out.println("  3. Pareigos:           http://localhost:8080/api/pareigos");
+            System.out.println("  4. Prekės:             http://localhost:8080/api/prekes");
+            System.out.println("  5. Kategorijos:        http://localhost:8080/api/kategorijos");
+            System.out.println("  6. Inventorius:        http://localhost:8080/api/inventorius");
+            System.out.println("  7. Pardavimai:         http://localhost:8080/api/pardavimai");
+            System.out.println("  8. Pardavimo eilutės:  http://localhost:8080/api/pardavimo-eilutes");
+            System.out.println("\nFrontend:              http://localhost:8080");
             System.out.println("==============================================\n");
 
         } catch (Exception e) {
