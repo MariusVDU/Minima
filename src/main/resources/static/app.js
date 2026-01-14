@@ -39,6 +39,7 @@ function showPage(page) {
     switch(page) {
         case 'dashboard': loadDashboard(); break;
         case 'prekes': loadPrekes(); break;
+        case 'kategorijos': loadKategorijos(); break;
         case 'inventorius': loadInventorius(); break;
         case 'pardavimai': loadPardavimai(); break;
         case 'parduotuves': loadParduotuves(); break;
@@ -1509,6 +1510,158 @@ async function deletePareigos(pareiguId) {
     } catch (error) {
         console.error('Klaida trinant pareigas:', error);
         showError('Ryšio klaida - nepavyko ištrinti pareigų');
+    }
+}
+
+// Kategorijos
+async function loadKategorijos() {
+    try {
+        kategorijos = await fetch(`${API_BASE}/kategorijos`).then(r => r.json());
+        displayKategorijos(kategorijos);
+        
+        // Setup search
+        document.getElementById('search-kategorija').addEventListener('input', filterKategorijos);
+    } catch (error) {
+        console.error('Klaida kraunant kategorijas:', error);
+        showError('Nepavyko užkrauti kategorijų');
+    }
+}
+
+function displayKategorijos(items) {
+    const tbody = document.getElementById('kategorijos-table');
+    if (items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Kategorijų nerasta</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = items.map(kategorija => `
+        <tr>
+            <td>${kategorija.kategorijosId}</td>
+            <td><strong>${kategorija.pavadinimas}</strong></td>
+            <td>${kategorija.aprasymas || '-'}</td>
+            <td>
+                <button class="btn btn-sm btn-info" onclick="editKategorija(${kategorija.kategorijosId})">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="deleteKategorija(${kategorija.kategorijosId})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function filterKategorijos() {
+    const search = document.getElementById('search-kategorija').value.toLowerCase();
+    const filtered = kategorijos.filter(k => 
+        k.pavadinimas.toLowerCase().includes(search) ||
+        (k.aprasymas && k.aprasymas.toLowerCase().includes(search))
+    );
+    displayKategorijos(filtered);
+}
+
+function showKategorijaModal(kategorijosId = null) {
+    const isEdit = kategorijosId !== null;
+    let kategorija = {};
+    
+    if (isEdit) {
+        kategorija = kategorijos.find(k => k.kategorijosId === kategorijosId) || {};
+    }
+    
+    const modal = `
+        <div class="modal fade" id="kategorijaModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${isEdit ? 'Redaguoti kategoriją' : 'Nauja kategorija'}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="kategorijaForm">
+                            <div class="mb-3">
+                                <label class="form-label">Pavadinimas *</label>
+                                <input type="text" class="form-control" name="pavadinimas" value="${kategorija.pavadinimas || ''}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Aprašymas</label>
+                                <textarea class="form-control" name="aprasymas" rows="3">${kategorija.aprasymas || ''}</textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Atšaukti</button>
+                        <button type="button" class="btn btn-primary" onclick="saveKategorija(${kategorijosId})">Išsaugoti</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    showModal(modal);
+}
+
+async function saveKategorija(kategorijosId) {
+    const form = document.getElementById('kategorijaForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const formData = new FormData(form);
+    const data = {
+        pavadinimas: formData.get('pavadinimas'),
+        aprasymas: formData.get('aprasymas')
+    };
+    
+    try {
+        const url = kategorijosId ? `${API_BASE}/kategorijos/${kategorijosId}` : `${API_BASE}/kategorijos`;
+        const method = kategorijosId ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            closeModal();
+            showSuccess(kategorijosId ? 'Kategorija atnaujinta' : 'Kategorija sukurta');
+            loadKategorijos();
+            loadInitialData();
+        } else {
+            const errorText = await response.text();
+            showError(`Nepavyko išsaugoti kategorijos: ${errorText || 'nežinoma klaida'}`);
+        }
+    } catch (error) {
+        console.error('Klaida:', error);
+        showError('Nepavyko išsaugoti kategorijos');
+    }
+}
+
+function editKategorija(kategorijosId) {
+    showKategorijaModal(kategorijosId);
+}
+
+async function deleteKategorija(kategorijosId) {
+    if (!confirm('Ar tikrai norite ištrinti šią kategoriją?')) return;
+    
+    try {
+        const response = await fetch(`${API_BASE}/kategorijos/${kategorijosId}`, { method: 'DELETE' });
+        if (response.ok) {
+            showSuccess('Kategorija ištrinta');
+            loadKategorijos();
+            loadInitialData();
+        } else {
+            const errorText = await response.text();
+            if (response.status === 409 || errorText.includes('constraint')) {
+                showError('Kategorija negali būti ištrinta - jai priskirtos prekės');
+            } else {
+                showError(`Nepavyko ištrinti kategorijos: ${errorText || 'nežinoma klaida'}`);
+            }
+        }
+    } catch (error) {
+        console.error('Klaida trinant kategoriją:', error);
+        showError('Ryšio klaida - nepavyko ištrinti kategorijos');
     }
 }
 
