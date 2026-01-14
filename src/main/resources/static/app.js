@@ -1178,7 +1178,7 @@ async function loadDarbuotojai() {
 function displayDarbuotojai(items) {
     const tbody = document.getElementById('darbuotojai-table');
     if (items.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Darbuotojų nerasta</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">Darbuotojų nerasta</td></tr>';
         return;
     }
     
@@ -1196,11 +1196,15 @@ function displayDarbuotojai(items) {
                 <td>${parduotuve ? `${parduotuve.miestas} - ${parduotuve.gatve}` : '-'}</td>
                 <td>${darbuotojas.telefonas}</td>
                 <td>${darbuotojas.elPastas || '-'}</td>
+                <td class="text-end">${darbuotojas.valandinisAtlyginimas ? parseFloat(darbuotojas.valandinisAtlyginimas).toFixed(2) + ' €' : '-'}</td>
                 <td>
-                    <button class="btn btn-sm btn-info" onclick="editDarbuotojas(${darbuotojas.id})">
+                    <button class="btn btn-sm btn-primary" onclick="viewDarbuotojas(${darbuotojas.id})" title="Peržiūrėti">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-info" onclick="editDarbuotojas(${darbuotojas.id})" title="Redaguoti">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteDarbuotojas(${darbuotojas.id})">
+                    <button class="btn btn-sm btn-danger" onclick="deleteDarbuotojas(${darbuotojas.id})" title="Ištrinti">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>
@@ -1349,6 +1353,141 @@ async function saveDarbuotojas(darbuotojasId) {
 
 function editDarbuotojas(darbuotojasId) {
     showDarbuotojasModal(darbuotojasId);
+}
+
+function viewDarbuotojas(darbuotojasId) {
+    const darbuotojas = darbuotojai.find(d => d.id === darbuotojasId);
+    if (!darbuotojas) {
+        showError('Darbuotojas nerastas');
+        return;
+    }
+
+    const parduotuve = parduotuves.find(p => p.id === darbuotojas.parduotuvesId);
+    const pareiga = pareigos.find(p => p.pareiguId === darbuotojas.pareiguId);
+
+    const modal = `
+        <div class="modal fade" id="viewDarbuotojasModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title"><i class="bi bi-person-circle"></i> Darbuotojo informacija</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <strong><i class="bi bi-person"></i> Asmeninė informacija</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <th width="40%">ID:</th>
+                                                <td>${darbuotojas.id}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Vardas:</th>
+                                                <td>${darbuotojas.vardas}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pavardė:</th>
+                                                <td>${darbuotojas.pavarde}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Asmens kodas:</th>
+                                                <td>${darbuotojas.asmensKodas || '-'}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <strong><i class="bi bi-telephone"></i> Kontaktai</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <th width="40%">Telefonas:</th>
+                                                <td>${darbuotojas.telefonas}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>El. paštas:</th>
+                                                <td>${darbuotojas.elPastas || '-'}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <strong><i class="bi bi-briefcase"></i> Darbo informacija</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <th width="40%">Pareigos:</th>
+                                                <td>${pareiga ? pareiga.pavadinimas : '-'}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pareigų ID:</th>
+                                                <td>${darbuotojas.pareiguId}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Parduotuvė:</th>
+                                                <td>${parduotuve ? `${parduotuve.miestas} - ${parduotuve.gatve}` : '-'}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Parduotuvės ID:</th>
+                                                <td>${darbuotojas.parduotuvesId}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Įdarbinimo data:</th>
+                                                <td>${darbuotojas.idarbinimoData ? new Date(darbuotojas.idarbinimoData).toLocaleDateString('lt-LT') : '-'}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <strong><i class="bi bi-cash-coin"></i> Atlyginimas</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <th width="40%">Valandinis:</th>
+                                                <td class="h5 text-success mb-0">
+                                                    ${darbuotojas.valandinisAtlyginimas ? parseFloat(darbuotojas.valandinisAtlyginimas).toFixed(2) + ' €' : '-'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Mėnesinis (160 val.):</th>
+                                                <td class="text-muted">
+                                                    ${darbuotojas.valandinisAtlyginimas ? (parseFloat(darbuotojas.valandinisAtlyginimas) * 160).toFixed(2) + ' €' : '-'}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Uždaryti</button>
+                        <button type="button" class="btn btn-primary" onclick="closeModal(); editDarbuotojas(${darbuotojasId})">
+                            <i class="bi bi-pencil"></i> Redaguoti
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    showModal(modal);
 }
 
 async function deleteDarbuotojas(darbuotojasId) {
