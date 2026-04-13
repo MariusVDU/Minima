@@ -1,6 +1,8 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,6 +14,7 @@ public class Preke {
     @Column(name = "prekes_id")
     private Long prekesId;
     
+    @NotBlank
     @Column(nullable = false, length = 200)
     private String pavadinimas;
     
@@ -24,6 +27,7 @@ public class Preke {
     @Column(name = "pirkimo_kaina", precision = 10, scale = 2)
     private BigDecimal pirkimoKaina;
     
+    @NotNull
     @Column(name = "pardavimo_kaina", nullable = false, precision = 10, scale = 2)
     private BigDecimal pardavimoKaina;
     

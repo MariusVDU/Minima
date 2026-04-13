@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,9 +14,11 @@ public class Inventorius {
     @Column(name = "inventoriaus_id")
     private Long inventoriausId;
     
+    @NotNull
     @Column(name = "prekes_id", nullable = false)
     private Long prekesId;
     
+    @NotNull
     @Column(name = "parduotuves_id", nullable = false)
     private Long parduotuvesId;
     

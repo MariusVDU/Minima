@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class InventoriusController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createInventorius(@RequestBody Inventorius inventorius) {
+    public ResponseEntity<?> createInventorius(@Valid @RequestBody Inventorius inventorius) {
         try {
             Inventorius created = inventoriusService.createInventorius(inventorius);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -66,7 +67,7 @@ public class InventoriusController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateInventorius(@PathVariable Long id, @RequestBody Inventorius inventoriusDetails) {
+    public ResponseEntity<?> updateInventorius(@PathVariable Long id, @Valid @RequestBody Inventorius inventoriusDetails) {
         try {
             Inventorius updated = inventoriusService.updateInventorius(id, inventoriusDetails);
             return ResponseEntity.ok(updated);

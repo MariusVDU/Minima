@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "kategorijos")
@@ -11,6 +12,7 @@ public class Kategorija {
     @Column(name = "kategorijos_id")
     private Long kategorijosId;
     
+    @NotBlank
     @Column(nullable = false, unique = true, length = 100)
     private String pavadinimas;
     

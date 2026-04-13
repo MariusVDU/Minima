@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -13,9 +14,11 @@ public class Pardavimas {
     @Column(name = "pardavimo_id")
     private Long pardavimoId;
     
+    @NotNull
     @Column(name = "parduotuves_id", nullable = false)
     private Long parduotuvesId;
     
+    @NotNull
     @Column(name = "darbuotojo_id", nullable = false)
     private Long darbuotojoId;
     

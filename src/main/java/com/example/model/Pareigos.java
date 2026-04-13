@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "pareigos")
@@ -11,6 +12,7 @@ public class Pareigos {
     @Column(name = "pareigu_id")
     private Long pareiguId;
     
+    @NotBlank
     @Column(nullable = false, length = 100)
     private String pavadinimas;
     

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ public class PrekeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPreke(@RequestBody Preke preke) {
+    public ResponseEntity<?> createPreke(@Valid @RequestBody Preke preke) {
         try {
             Preke created = prekeService.createPreke(preke);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -57,7 +58,7 @@ public class PrekeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePreke(@PathVariable Long id, @RequestBody Preke prekeDetails) {
+    public ResponseEntity<?> updatePreke(@PathVariable Long id, @Valid @RequestBody Preke prekeDetails) {
         try {
             Preke updated = prekeService.updatePreke(id, prekeDetails);
             return ResponseEntity.ok(updated);

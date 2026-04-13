@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,7 @@ public class ParduotuveController {
 
     // POST /api/parduotuves - sukurti naują parduotuvę
     @PostMapping
-    public ResponseEntity<?> createParduotuve(@RequestBody Parduotuve parduotuve) {
+    public ResponseEntity<?> createParduotuve(@Valid @RequestBody Parduotuve parduotuve) {
         try {
             Parduotuve created = parduotuveService.createParduotuve(parduotuve);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -51,7 +52,7 @@ public class ParduotuveController {
 
     // PUT /api/parduotuves/{id} - atnaujinti parduotuvę
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateParduotuve(@PathVariable Long id, @RequestBody Parduotuve parduotuveDetails) {
+    public ResponseEntity<?> updateParduotuve(@PathVariable Long id, @Valid @RequestBody Parduotuve parduotuveDetails) {
         try {
             Parduotuve updated = parduotuveService.updateParduotuve(id, parduotuveDetails);
             return ResponseEntity.ok(updated);

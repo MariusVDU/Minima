@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,7 @@ public class KategorijaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createKategorija(@RequestBody Kategorija kategorija) {
+    public ResponseEntity<?> createKategorija(@Valid @RequestBody Kategorija kategorija) {
         try {
             Kategorija created = kategorijaService.createKategorija(kategorija);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -46,7 +47,7 @@ public class KategorijaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateKategorija(@PathVariable Long id, @RequestBody Kategorija kategorijaDetails) {
+    public ResponseEntity<?> updateKategorija(@PathVariable Long id, @Valid @RequestBody Kategorija kategorijaDetails) {
         try {
             Kategorija updated = kategorijaService.updateKategorija(id, kategorijaDetails);
             return ResponseEntity.ok(updated);

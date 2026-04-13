@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class PardavimoEiluteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createEilute(@RequestBody PardavimoEilute eilute) {
+    public ResponseEntity<?> createEilute(@Valid @RequestBody PardavimoEilute eilute) {
         try {
             PardavimoEilute created = pardavimoEiluteService.createEilute(eilute);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -49,7 +50,7 @@ public class PardavimoEiluteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEilute(@PathVariable Long id, @RequestBody PardavimoEilute eiluteDetails) {
+    public ResponseEntity<?> updateEilute(@PathVariable Long id, @Valid @RequestBody PardavimoEilute eiluteDetails) {
         try {
             PardavimoEilute updated = pardavimoEiluteService.updateEilute(id, eiluteDetails);
             return ResponseEntity.ok(updated);

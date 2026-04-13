@@ -1,6 +1,8 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,30 +14,38 @@ public class Darbuotojas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotBlank
     @Column(nullable = false, length = 100)
     private String vardas;
     
+    @NotBlank
     @Column(nullable = false, length = 100)
     private String pavarde;
     
+    @NotBlank
     @Column(name = "asmens_kodas", nullable = false, unique = true, length = 20)
     private String asmensKodas;
     
+    @NotBlank
     @Column(nullable = false, unique = true, length = 20)
     private String telefonas;
     
     @Column(name = "el_pastas", unique = true, length = 100)
     private String elPastas;
     
+    @NotNull
     @Column(name = "parduotuves_id", nullable = false)
     private Long parduotuvesId;
     
+    @NotNull
     @Column(name = "pareigu_id", nullable = false)
     private Long pareiguId;
     
+    @NotNull
     @Column(name = "idarbinimo_data", nullable = false)
     private LocalDate idarbinimoData;
     
+    @NotNull
     @Column(name = "valandinis_atlyginimas", nullable = false, precision = 10, scale = 2)
     private BigDecimal valandinisAtlyginimas;
 

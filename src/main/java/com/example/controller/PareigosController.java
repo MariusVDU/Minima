@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class PareigosController {
 
     // POST /api/pareigos - sukurti naujas pareigas
     @PostMapping
-    public ResponseEntity<?> createPareigos(@RequestBody Pareigos pareigos) {
+    public ResponseEntity<?> createPareigos(@Valid @RequestBody Pareigos pareigos) {
         try {
             Pareigos created = pareigosService.createPareigos(pareigos);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -52,7 +53,7 @@ public class PareigosController {
 
     // PUT /api/pareigos/{id} - atnaujinti pareigas
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePareigos(@PathVariable Long id, @RequestBody Pareigos pareigosDetails) {
+    public ResponseEntity<?> updatePareigos(@PathVariable Long id, @Valid @RequestBody Pareigos pareigosDetails) {
         try {
             Pareigos updated = pareigosService.updatePareigos(id, pareigosDetails);
             return ResponseEntity.ok(updated);

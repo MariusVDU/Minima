@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,15 +13,19 @@ public class PardavimoEilute {
     @Column(name = "eilutes_id")
     private Long eilutesId;
     
+    @NotNull
     @Column(name = "pardavimo_id", nullable = false)
     private Long pardavimoId;
     
+    @NotNull
     @Column(name = "prekes_id", nullable = false)
     private Long prekesId;
     
+    @NotNull
     @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal kiekis;
     
+    @NotNull
     @Column(name = "vieneto_kaina", nullable = false, precision = 10, scale = 2)
     private BigDecimal vienetoKaina;
     

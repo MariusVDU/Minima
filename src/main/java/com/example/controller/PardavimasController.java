@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -61,8 +62,11 @@ public class PardavimasController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPardavimas(@RequestBody Pardavimas pardavimas) {
+    public ResponseEntity<?> createPardavimas(@Valid @RequestBody Pardavimas pardavimas) {
         try {
+            if (pardavimas.getParduotuvesId() == null || pardavimas.getDarbuotojoId() == null) {
+                return ResponseEntity.badRequest().body("Trūksta privalomų pardavimo laukų");
+            }
             Pardavimas created = pardavimasService.createPardavimas(pardavimas);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (RuntimeException e) {
@@ -71,8 +75,11 @@ public class PardavimasController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePardavimas(@PathVariable Long id, @RequestBody Pardavimas pardavimasDetails) {
+    public ResponseEntity<?> updatePardavimas(@PathVariable Long id, @Valid @RequestBody Pardavimas pardavimasDetails) {
         try {
+            if (pardavimasDetails.getParduotuvesId() == null || pardavimasDetails.getDarbuotojoId() == null) {
+                return ResponseEntity.badRequest().body("Trūksta privalomų pardavimo laukų");
+            }
             Pardavimas updated = pardavimasService.updatePardavimas(id, pardavimasDetails);
             return ResponseEntity.ok(updated);
         } catch (RuntimeException e) {

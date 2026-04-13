@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -55,7 +56,7 @@ public class DarbuotojasController {
 
     // POST /api/darbuotojai - sukurti naują darbuotoją
     @PostMapping
-    public ResponseEntity<?> createDarbuotojas(@RequestBody Darbuotojas darbuotojas) {
+    public ResponseEntity<?> createDarbuotojas(@Valid @RequestBody Darbuotojas darbuotojas) {
         try {
             Darbuotojas created = darbuotojasService.createDarbuotojas(darbuotojas);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -66,7 +67,7 @@ public class DarbuotojasController {
 
     // PUT /api/darbuotojai/{id} - atnaujinti darbuotoją
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateDarbuotojas(@PathVariable Long id, @RequestBody Darbuotojas darbuotojasDetails) {
+    public ResponseEntity<?> updateDarbuotojas(@PathVariable Long id, @Valid @RequestBody Darbuotojas darbuotojasDetails) {
         try {
             Darbuotojas updated = darbuotojasService.updateDarbuotojas(id, darbuotojasDetails);
             return ResponseEntity.ok(updated);
